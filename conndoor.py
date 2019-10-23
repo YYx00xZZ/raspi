@@ -42,7 +42,7 @@ def opened(state='OPENED'):
 
 button = Button(18)
 led = PWMLED(16, frequency=80)
-relay = OutputDevice(17,active_high=False,initial_value=False)
+relay = OutputDevice(17,active_high=True,initial_value=False)
 bz = Buzzer(26)
     #   About chat
 def checkId(chat_id):
@@ -62,7 +62,7 @@ def handle(msg):
                 relay.toggle()
                 snitchMsg('\nStatus: {}'.format(str(relay.value)), None )
             elif command == '/status':
-                statusCheck(button,led)
+                statusCheck()
         #   If not an auth user
         else:
             return
@@ -71,8 +71,8 @@ def handle(msg):
 
 MessageLoop(bot, handle).run_as_thread()
 
-def statusCheck(button, led):
-    message=('<code>Door sensor:{}\nLED value:{}\nRelay status:{}</code>'.format(button.value,led.value,relay.value))
+def statusCheck():
+    message=('<code>Door sensor:{}\nLED value:{}\nRelay status:{}\nBuzzer status: {}</code>'.format(button.value,led.value,relay.value,bz.value))
     snitchMsg(message,'Html')
 try:
     initVal(button.is_pressed)
@@ -85,3 +85,4 @@ try:
 except KeyboardInterrupt:
     print ('\nExiting app\n')
     bz.close()
+    relay.close()
