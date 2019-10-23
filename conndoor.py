@@ -1,4 +1,4 @@
-from gpiozero import Button,PWMLED,OutputDevice
+from gpiozero import Button,PWMLED,OutputDevice,Buzzer
 import telepot
 from telepot.loop import MessageLoop
 from datetime import datetime
@@ -32,16 +32,18 @@ def closed(state='CLOSED'):
     snitchMsg(state,None)
 #    print (state)
     puls(1, 0.6)
+    bz.off()
 
 def opened(state='OPENED'):
     snitchMsg(state,None)
 #    print (state)
     puls(0.05, 0.6)
+    bz.beep(on_time=1, off_time=1, n=2, background=True)
 
 button = Button(18)
 led = PWMLED(16, frequency=80)
 relay = OutputDevice(17,active_high=False,initial_value=False)
-
+bz = Buzzer(26)
     #   About chat
 def checkId(chat_id):
     if chat_id == myId:
@@ -82,3 +84,4 @@ try:
     pause()
 except KeyboardInterrupt:
     print ('\nExiting app\n')
+    bz.close()
