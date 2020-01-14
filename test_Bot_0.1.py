@@ -14,21 +14,29 @@ ser = serial.Serial('COM8', 9600)
 
 bot = telegram.Bot(token=config.TOKEN)
 
+# Custom function which takes some data and normalize it in a way
+# that we can then use it to detect change in reed switch sensor
+# a.k.a. decoding and striping; self-descriptive..
 def normalize(inputData):
     inputData1 = inputData.decode()
     inputData2 = inputData1.strip()
     return inputData2
-    
+
+# Custom function to reflect door event;
+#                 to inform the user of the event
 def stitch(text):
     bot.send_message(chat_id=config.houseKeeper, text=text)
 
 def echo(update, context):
     update.message.reply_text(update.message.text)
 
+# Toggling a led
 def toggleLed(update, context):
     arg = ""
+#   If our Command contains arguments, go on    
     if context.args:
         arg = context.args[0].lower()
+#       Check what type or arg we have and react in adequate manner        
         if (arg == "on"):
             ser.write("L1\n".encode())
             msgText = "Led ON."
@@ -37,6 +45,7 @@ def toggleLed(update, context):
             msgText = "Led OFF."
         else:
             msgText = "undefined arg, bace :)"
+#   Else if arguments are empty - throw error            
     else:
         msgText = "Arguments expected but not supplied, supplier :)"
     update.message.reply_text(msgText)
