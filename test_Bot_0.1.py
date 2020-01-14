@@ -26,18 +26,19 @@ def echo(update, context):
     update.message.reply_text(update.message.text)
 
 def toggleLed(update, context):
-    if not context.args:
-        #update.message.reply_text("undefined, bace :)")
-        msgText="Arguments expected but not supplied, supplier :)"
-    else:
+    arg = ""
+    if context.args:
         arg = context.args[0].lower()
-        if (arg == "off"):
-            ser.write("L0\n".encode())
         if (arg == "on"):
             ser.write("L1\n".encode())
-        if (arg != "" and (arg != "off") or (arg != "on")):
-            #update.message.reply_text("undefined, bace :)")
-            msgText="undefined arg, bace :)"
+            msgText = "Led ON."
+        elif (arg == "off"):
+            ser.write("L0\n".encode())
+            msgText = "Led OFF."
+        else:
+            msgText = "undefined arg, bace :)"
+    else:
+        msgText = "Arguments expected but not supplied, supplier :)"
     update.message.reply_text(msgText)
         
 def error(update, context):
