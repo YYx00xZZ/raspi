@@ -26,11 +26,20 @@ def echo(update, context):
     update.message.reply_text(update.message.text)
 
 def toggleLed(update, context):
-    print("arguments of cmd" + context.args[0])
-    preBit = update.message.text.encode()
-    print (preBit)
-    ser.write(preBit)
-    
+    if not context.args:
+        #update.message.reply_text("undefined, bace :)")
+        msgText="Arguments expected but not supplied, supplier :)"
+    else:
+        arg = context.args[0].lower()
+        if (arg == "off"):
+            ser.write("L0\n".encode())
+        if (arg == "on"):
+            ser.write("L1\n".encode())
+        if (arg != "" and (arg != "off") or (arg != "on")):
+            #update.message.reply_text("undefined, bace :)")
+            msgText="undefined arg, bace :)"
+    update.message.reply_text(msgText)
+        
 def error(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
@@ -47,7 +56,7 @@ def main():
 
     dp.add_error_handler(error)
 
-    updater.start_polling()
+    updater.start_polling(poll_interval=5.0)
 
     while True:
         currState = normalize(ser.readline())
