@@ -40,6 +40,24 @@ def toggleLed(update, context):
     else:
         msgText = "Arguments expected but not supplied, supplier :)"
     update.message.reply_text(msgText)
+
+#Relay toggle setup
+def toggleRelay(update, context):
+    arg = ""
+    if context.args:
+        arg = context.args[0].lower()
+        if (arg == "on"):
+            ser.write("R1\n".encode())
+            msgText = "Relay ON."
+        elif (arg == "off"):
+            ser.write("R0\n".encode())
+            msgText = "Relay OFF."
+        else:
+            msgText = "undefined arg, bace :)"
+    else:
+        msgText = "Arguments expected but not supplied, supplier :)"
+    update.message.reply_text(msgText)
+        
         
 def error(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
@@ -52,6 +70,7 @@ def main():
     dp = updater.dispatcher
 
     dp.add_handler(CommandHandler("led", toggleLed, pass_args=True))
+    dp.add_handler(CommandHandler("relay", toggleRelay, pass_args=True))
 
     dp.add_handler(MessageHandler(Filters.text, echo))
 
