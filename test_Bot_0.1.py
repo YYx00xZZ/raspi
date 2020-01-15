@@ -30,6 +30,35 @@ def stitch(text):
 def echo(update, context):
     update.message.reply_text(update.message.text)
 
+# 15.02.2020
+#   TEST
+def cmdArgs(arg):
+    if (arg == "on"):
+        ser.write("R1\n".encode())
+        return "VIRTUALKQt ON."
+    elif (arg == "off"):
+        ser.write("R0\n".encode())
+        return "VIRTUALKQt OFF."
+    elif ("on" in arg and "off" in arg):
+        return "Did you mean /virtual on? Or maybe .. off ? However, you have to choose one."
+    elif ("on" in arg):
+        return "Did you mean /virtual on"
+    elif ("off" in arg):
+        return "Did you mean /virtual off"
+    else:
+        return "undefined, bace :). otchaivasht si"
+
+# Toggling virtual shit test cmd
+def toggleVirtual(update, context):
+    arg = ""
+    msgText = ""
+    if context.args:
+        arg = context.args[0].lower()
+        msgText = cmdArgs(arg)
+    else:
+        msgText = "Arguments expected but not supplied, supplier :)"
+    update.message.reply_text(msgText)
+
 # Toggling a led
 def toggleLed(update, context):
     arg = ""
@@ -80,7 +109,8 @@ def main():
 
     dp.add_handler(CommandHandler("led", toggleLed, pass_args=True))
     dp.add_handler(CommandHandler("relay", toggleRelay, pass_args=True))
-
+    dp.add_handler(CommandHandler("virtual", toggleVirtual, pass_args=True))
+    
     dp.add_handler(MessageHandler(Filters.text, echo))
 
     dp.add_error_handler(error)
