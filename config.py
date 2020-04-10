@@ -1,5 +1,5 @@
 # BOT CREDENTIALS
     # dubnik @dubnikbot
-TOKEN='995423885:AAGpDx1VTSM5JVzXbT8jdZZJIroQyX4synk'
+TOKEN='bot_token'
     # my ID
-houseKeeper = 537399849
+houseKeeper = user id here
